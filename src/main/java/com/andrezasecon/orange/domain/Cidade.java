@@ -1,13 +1,11 @@
-package com.andrezasecon.orange.domains;
+package com.andrezasecon.orange.domain;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 @Entity // informa ao JPA que essa classe é uma tabela
-public class Estado implements Serializable {
+public class Cidade implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id // informa ao JPA que o atributo id é o id na tabela
@@ -15,17 +13,21 @@ public class Estado implements Serializable {
     private Integer id;
     private String name;
 
-    //Associação de 1 para muitos (Um Estado possui muitas cidades)
-    // A lista deve ser instanciada
-    @OneToMany(mappedBy = "estado") // atributo de estado que mapeou a cidade
-    private List<Cidade> cidades = new ArrayList<>();
+    //Associação de muitos para 1 (Cidades possuem apenas um estado)
+    @ManyToOne
+    @JoinColumn(name = "estado_id") // chave estrangeira de estado na tabela cidade
+    private Estado estado;
 
-    public Estado() {
+    // Construtor do objeto sem argumentos
+    public Cidade(){
+
     }
 
-    public Estado(Integer id, String name) {
+    //construtor do objeto com argumentos
+    public Cidade(Integer id, String name, Estado estado){
         this.id = id;
         this.name = name;
+        this.estado = estado;
     }
 
     public Integer getId() {
@@ -44,20 +46,20 @@ public class Estado implements Serializable {
         this.name = name;
     }
 
-    public List<Cidade> getCidades() {
-        return cidades;
+    public Estado getEstado() {
+        return estado;
     }
 
-    public void setCidades(List<Cidade> cidades) {
-        this.cidades = cidades;
+    public void setEstado(Estado estado) {
+        this.estado = estado;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Estado estado = (Estado) o;
-        return Objects.equals(id, estado.id);
+        Cidade cidade = (Cidade) o;
+        return Objects.equals(id, cidade.id);
     }
 
     @Override
