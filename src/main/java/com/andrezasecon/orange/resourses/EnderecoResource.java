@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Optional;
@@ -37,8 +39,9 @@ public class EnderecoResource {
           _user.getEnderecos().add(endereco);
           endereco.setUsuario(new HashSet(Arrays.asList(_user)));
           enderecoService.inserirEndereco(endereco);
+          URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("{/id}").buildAndExpand(user.get()).toUri();
 
-          return ResponseEntity.ok().build();
+          return ResponseEntity.created(uri).build();
       }
         return ResponseEntity.badRequest().build();
     }

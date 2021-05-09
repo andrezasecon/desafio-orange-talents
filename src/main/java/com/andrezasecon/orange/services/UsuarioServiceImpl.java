@@ -6,11 +6,13 @@ import com.andrezasecon.orange.repositories.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UsuarioServiceImpl implements UsuarioService{
+public class UsuarioServiceImpl implements UsuarioService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
@@ -40,8 +42,13 @@ public class UsuarioServiceImpl implements UsuarioService{
 
     }
 
-    public Usuario fromDTO(UsuarioDTO objDTO){
-        return new Usuario(objDTO.getId(), objDTO.getnome(), objDTO.getEmail(), objDTO.getCpf(), objDTO.getDataNiver());
+    public Usuario fromDTO(UsuarioDTO objDTO) {
+        Date dateNasc = null;
+        try {
+            dateNasc = new SimpleDateFormat("dd/MM/yyyy").parse(objDTO.getDataNasc());
+        } catch (Exception e) {
+        }
+        return new Usuario(objDTO.getId(), objDTO.getnome(), objDTO.getEmail(), objDTO.getCpf(), dateNasc);
     }
 
 }

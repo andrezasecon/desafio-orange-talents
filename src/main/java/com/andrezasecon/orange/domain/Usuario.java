@@ -1,10 +1,7 @@
 package com.andrezasecon.orange.domain;
 
-import org.springframework.transaction.annotation.EnableTransactionManagement;
-
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -17,11 +14,16 @@ public class Usuario implements Serializable {
     @Id // informa ao JPA que o atributo id é o id na tabela
     @GeneratedValue(strategy = GenerationType.IDENTITY) // gera automaticamente o id
     private Integer id;
+
+
     private String nome;
+
     @Column(unique=true)
     private String email;
+
     @Column(unique=true)
     private String cpf;
+
     private Date dataNiver;
 
     // Associação 1 para muitos (Um cliente possui 1 ou muitos endereços)

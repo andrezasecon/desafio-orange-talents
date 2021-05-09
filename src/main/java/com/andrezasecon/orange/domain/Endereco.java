@@ -41,7 +41,7 @@ public class Endereco implements Serializable {
 
     }
 
-    public Endereco(EnderecoDTO enderecoDTO){
+    public Endereco(EnderecoDTO enderecoDTO) {
         this.logradouro = enderecoDTO.getLogradouro();
         this.numero = enderecoDTO.getNumero();
         this.complemento = enderecoDTO.getComplemento();

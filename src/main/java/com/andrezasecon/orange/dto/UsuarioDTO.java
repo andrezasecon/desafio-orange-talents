@@ -1,10 +1,12 @@
 package com.andrezasecon.orange.dto;
 
 import com.andrezasecon.orange.domain.Usuario;
-import com.fasterxml.jackson.annotation.JsonFormat;
+import org.hibernate.validator.constraints.br.CPF;
 
+import javax.validation.constraints.*;
 import java.io.Serializable;
-import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,23 +15,39 @@ public class UsuarioDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Integer id;
+    @NotNull(message = "Digite um nome")
+    @NotEmpty(message = "Campo nome não pode ser vazio")
+    @Size(min = 3, max = 30, message = "O nome deve ter entre 3 e 30 caracteres")
     private String nome;
+
+    @NotNull(message = "Digite um email")
+    @NotEmpty(message = "Campo email não pode ser vazio")
+    @Email(message = "email inválido")
     private String email;
+
+    @NotNull(message = "Digite um CPF")
+    @NotEmpty(message = "Campo CPF não pode ser vazio")
+    @CPF(message = "CPF invalido")
     private String cpf;
-    @JsonFormat(pattern="dd/MM/yyyy")
-    private Date dataNiver;
+
+
+    @NotEmpty(message = "Digite uma data")
+    @Pattern(regexp = "^(?:(?:31(\\/|-|\\.)(?:0?[13578]|1[02]))\\1|(?:(?:29|30)(\\/|-|\\.)(?:0?[13-9]|1[0-2])\\2))(?:(?:1[6-9]|[2-9]\\d)?\\d{2})$",
+            message = "A data de nascimento deve ser no formato dd/mm/aaaa")
+    public String dataNasc = null;
+
     private List<EnderecoDTO> listEnderecosDTO;
 
     public UsuarioDTO() {
     }
-
 
     public UsuarioDTO(Usuario userObj) {
         id = userObj.getId();
         nome = userObj.getnome();
         email = userObj.getEmail();
         cpf = userObj.getCpf();
-        dataNiver = userObj.getDataNiver();
+        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        dataNasc = dateFormat.format(userObj.getDataNiver());
         listEnderecosDTO = userObj.getEnderecos().stream().map(EnderecoDTO::new).collect(Collectors.toList());
     }
 
@@ -65,19 +83,19 @@ public class UsuarioDTO implements Serializable {
         this.cpf = cpf;
     }
 
-    public Date getDataNiver() {
-        return dataNiver;
-    }
-
-    public void setDataNiver(Date dataNiver) {
-        this.dataNiver = dataNiver;
-    }
-
     public List<EnderecoDTO> getListEnderecosDTO() {
         return listEnderecosDTO;
     }
 
     public void setListEnderecosDTO(List<EnderecoDTO> listEnderecosDTO) {
         this.listEnderecosDTO = listEnderecosDTO;
+    }
+
+    public String getDataNasc() {
+        return dataNasc;
+    }
+
+    public void setDataNasc(String dataNasc) {
+        this.dataNasc = dataNasc;
     }
 }
