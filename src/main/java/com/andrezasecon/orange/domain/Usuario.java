@@ -17,21 +17,28 @@ public class Usuario implements Serializable {
     @Id // informa ao JPA que o atributo id é o id na tabela
     @GeneratedValue(strategy = GenerationType.IDENTITY) // gera automaticamente o id
     private Integer id;
-    private String name;
+    private String nome;
+    @Column(unique=true)
     private String email;
+    @Column(unique=true)
     private String cpf;
     private Date dataNiver;
 
     // Associação 1 para muitos (Um cliente possui 1 ou muitos endereços)
-    @OneToMany(mappedBy = "usuario") // jpa foi mapeado na classe usuário
-    private List<Endereco> enderecos = new ArrayList<>();
+    //@OneToMany(mappedBy = "usuario") // jpa foi mapeado na classe
+
+    @ManyToMany
+    @JoinTable(name = "tb_usuario_endereco",
+            joinColumns = @JoinColumn(name = "usuario_id"),
+            inverseJoinColumns = @JoinColumn(name = "endereco_id"))
+    private List<Endereco> enderecos;
 
     public Usuario() {
     }
 
-    public Usuario(Integer id, String name, String email, String cpf, Date dataNiver) {
+    public Usuario(Integer id, String nome, String email, String cpf, Date dataNiver) {
         this.id = id;
-        this.name = name;
+        this.nome = nome;
         this.email = email;
         this.cpf = cpf;
         this.dataNiver = dataNiver;
@@ -45,12 +52,12 @@ public class Usuario implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getnome() {
+        return nome;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setnome(String nome) {
+        this.nome = nome;
     }
 
     public String getEmail() {

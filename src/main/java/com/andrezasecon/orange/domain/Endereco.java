@@ -1,8 +1,11 @@
 package com.andrezasecon.orange.domain;
 
+import com.andrezasecon.orange.dto.EnderecoDTO;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 public class Endereco implements Serializable {
@@ -16,31 +19,38 @@ public class Endereco implements Serializable {
     private String complemento;
     private String bairro;
     private String cep;
+    private String estado;
+    private String cidade;
 
-    // Associação muitos para um
-    @ManyToOne
-    @JoinColumn(name = "usuario_id")
-    private Usuario usuario;
-
-    // Associação muitos para um
-    @ManyToOne
-    @JoinColumn(name = "cidade_id") // chave estrangeira de cidade na tabela endereço
-    private Cidade cidade;
+    // Associação muitos para muitos
+    @ManyToMany(mappedBy = "enderecos")
+    Set<Usuario> usuario;
 
     public Endereco() {
     }
 
-    public Endereco(Integer id, String logradouro, String numero, String complemento, String bairro, String cep, Usuario usuario, Cidade cidade) {
+    public Endereco(Integer id, String logradouro, String numero, String complemento, String bairro, String cep, String cidade, String estado) {
         this.id = id;
         this.logradouro = logradouro;
         this.numero = numero;
         this.complemento = complemento;
         this.bairro = bairro;
         this.cep = cep;
-        this.usuario = usuario;
         this.cidade = cidade;
+        this.estado = estado;
 
     }
+
+    public Endereco(EnderecoDTO enderecoDTO){
+        this.logradouro = enderecoDTO.getLogradouro();
+        this.numero = enderecoDTO.getNumero();
+        this.complemento = enderecoDTO.getComplemento();
+        this.bairro = enderecoDTO.getBairro();
+        this.cep = enderecoDTO.getCep();
+        this.cidade = enderecoDTO.getCidade();
+        this.estado = enderecoDTO.getEstado();
+    }
+
 
     public Integer getId() {
         return id;
@@ -90,21 +100,30 @@ public class Endereco implements Serializable {
         this.cep = cep;
     }
 
-    public Usuario getUsuario() {
+    public Set<Usuario> getUsuario() {
         return usuario;
     }
 
-    public void setUsuario(Usuario usuario) {
+    public void setUsuario(Set<Usuario> usuario) {
         this.usuario = usuario;
     }
 
-    public Cidade getCidade() {
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public String getCidade() {
         return cidade;
     }
 
-    public void setCidade(Cidade cidade) {
+    public void setCidade(String cidade) {
         this.cidade = cidade;
     }
+
 
     @Override
     public boolean equals(Object o) {
